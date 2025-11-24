@@ -19,13 +19,15 @@ jobs:
     steps:
       - name: Get the latest version of Sarasa Gothic
         id: get-latest-version
+        uses: actions/github-script@v8
         run: |
-          TAG=$(echo ${{ github.ref_name }} | cut -d '-' -f 1)
-          echo "tag=${TAG}" >> $GITHUB_OUTPUT
-          echo tag is ${TAG}
-          VERSION=${TAG:1}
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo version is ${VERSION}
+          const { data: release } = await github.rest.repos.getLatestRelease({
+              owner: "be5invis",
+              repo: "Sarasa-Gothic",
+          });
+          core.setOutput('tag', release.tag_name);
+          const version = release.tag_name..match(/^v(\d+\.\d+\.\d+)/);
+          core.setOutput('version', version);
 
   prepare:
     runs-on: ubuntu-latest
