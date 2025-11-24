@@ -20,14 +20,15 @@ jobs:
       - name: Get the latest version of Sarasa Gothic
         id: get-latest-version
         uses: actions/github-script@v8
-        run: |
-          const { data: release } = await github.rest.repos.getLatestRelease({
-              owner: "be5invis",
-              repo: "Sarasa-Gothic",
-          });
-          core.setOutput('tag', release.tag_name);
-          const version = release.tag_name..match(/^v(\d+\.\d+\.\d+)/);
-          core.setOutput('version', version);
+        with:
+          script: |
+            const { data: release } = await github.rest.repos.getLatestRelease({
+                owner: "be5invis",
+                repo: "Sarasa-Gothic",
+            });
+            core.setOutput('tag', release.tag_name);
+            const version = release.tag_name.match(/^v(\d+\.\d+\.\d+)/);
+            core.setOutput('version', version[1]);
 
   prepare:
     runs-on: ubuntu-latest
