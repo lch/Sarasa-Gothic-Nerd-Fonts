@@ -1,9 +1,12 @@
 name: generate fonts
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      target_job:
+        description: 'Which job to run'
+        required: true
+        default: 'get-infomation'
 
 concurrency: generate-fonts
 
@@ -134,7 +137,7 @@ jobs:
       - run: ls -l
       - run: mkdir -p "${PWD}/outputs"
       - name: patch font without Material Design Icons to avoid reaching the 65535 glyphs limit
-        run: fontforge -script "${PWD}/font-patcher" --adjust-line-height --careful --codicons --fontawesome --fontawesomeext --fontlogos --octicons --powersymbols --pomicons --powerline --powerlineextra --weather --no-progressbars --quiet --removeligatures "${PWD}/${FILENAME}.ttf" --outputdir "${PWD}/outputs"
+        run: fontforge -script "${PWD}/font-patcher" --adjust-line-height --careful --complete --no-progressbars --quiet "${PWD}/${FILENAME}.ttf" --outputdir "${PWD}/outputs"
       - run: ls -l
       - run: ls -l "${PWD}/outputs"
       - name: rename patched font files
@@ -255,7 +258,7 @@ jobs:
       - run: ls -l
       - run: mkdir -p "${PWD}/outputs"
       - name: patch font without Material Design Icons to avoid reaching the 65535 glyphs limit
-        run: fontforge -script "${PWD}/font-patcher" --adjust-line-height --careful --codicons --fontawesome --fontawesomeext --fontlogos --octicons --powersymbols --pomicons --powerline --powerlineextra --weather --no-progressbars --quiet --removeligatures "${PWD}/${FILENAME}.ttf" --outputdir "${PWD}/outputs"
+        run: fontforge -script "${PWD}/font-patcher" --adjust-line-height --careful --complete --no-progressbars --quiet "${PWD}/${FILENAME}.ttf" --outputdir "${PWD}/outputs"
       - run: ls -l
       - run: ls -l "${PWD}/outputs"
       - name: rename patched font files
